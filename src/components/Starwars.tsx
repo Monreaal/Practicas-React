@@ -1,9 +1,17 @@
 import { useEffect, useState } from "react";
+// Declaramos la interfaz con las propiedades que usaremos
+// la interfaz se declara para mantener la coherencia de TS, asi no usamos "any" y evitamos romper la logica de TS
+interface Starship {
+  name: string;
+  model: string;
+  cost_in_credits: string;
+}
 
 export default function Starships() {
+    // Le indicas a useState que guardará un arreglo de tipo "Starship" usando genéricos y los corchetes []
+    const [starships, setStarships] = useState<Starship[]>([]); 
     const [loading,setLoading] = useState(true);
-    const [starships, setStarships] = useState([]);
-    const [error, setError] = useState(null);
+    const [error, setError] = useState<string | null>(null); // <string | null> son los tipos de valores que puede almacenar -en este caso 2-, string o vacio 
     
     useEffect(() => {
         
@@ -54,11 +62,12 @@ export default function Starships() {
             <h1 className="text-2xl font-bold text-center mb-4">Naves Espaciales</h1>
             <ul className="grid grid-cols-1 gap-4 md:grid-cols-2 lg:grid-cols-3 min-w-90">
                 {/* Abrimos llaves para poder escribir JavaScript dentro de nuestro HTML */}
-                {starships.map((starship: any) => ( //any significa
+                {starships.map((starship) => ( //any significa
                 
                 // Por cada 'starship', devolvemos una etiqueta de lista <li>
                 // React siempre pide una propiedad 'key' única cuando creas listas
-                <li key={starship.name} className="grid grid-cols-[1fr_30%] bg-white border border-gray-300 py-3 px-5 rounded-2xl relative w-full h-32 shadow-sm hover:shadow-md transition-shadow cursor-pointer"> 
+                <li key={starship.name} 
+                className="grid grid-cols-[1fr_30%] bg-white border border-gray-300 py-3 px-5 rounded-2xl relative w-full h-32 shadow-sm hover:shadow-md transition-shadow cursor-pointer"> 
                     {/*imprimimos propiedades de la nave espacial*/}
                     <div className="flex flex-col gap-1 w-2/3">
                         <span><span className="font-bold">Name: </span>{starship.name}</span>
@@ -66,7 +75,7 @@ export default function Starships() {
                     </div>
                     {/* min-w-0 ayuda a que el truncate funcione correctamente dentro de flex */}
                     <div className="min-w-0 flex flex-col gap-1 justify-center items-end ">
-                        <div className="text-lg font-bold py-2 px-4 truncate border border-gray-300 rounded-2xl max-w-[140px]">
+                        <div className="text-lg font-bold py-2 px-4 truncate border border-gray-300 rounded-2xl max-w-34">
                             ${starship.cost_in_credits}
                         </div>
                     </div>
